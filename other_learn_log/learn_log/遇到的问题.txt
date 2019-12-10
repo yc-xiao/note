@@ -1,0 +1,15 @@
+1.pip install -i https://pypi.douban.com/simple -r requests.txt
+    安装失败原因: 
+        1.权限不够(不报错)。
+        2.先全部下载再安装，中途有包下载错误，全部包未安装。
+        3.其他
+2.gitlab
+    同git相同操作，clone需要账号密码方式或ssh方式。
+    git项目内如果有子项目需要导入
+        1.初始化本地子模块配置文件
+        git submodule init
+        2.更新项目，抓取子模块内容。
+        git submodule update
+    PS：https://www.cnblogs.com/codingbit/p/git-clone-with-submodule.html
+3.系统安装
+    U盘安装可以是非ISO(解压形式)，直接进入bios以U盘启动即可(需要手动格式化硬盘)  

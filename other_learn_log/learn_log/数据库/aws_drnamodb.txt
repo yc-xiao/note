@@ -1,0 +1,33 @@
+DynamoDB 核心组件(表、项目和属性、主键、二级索引、DynamoDB 流)
+(https://docs.amazonaws.cn/amazondynamodb/latest/developerguide/HowItWorks.CoreComponents.html#HowItWorks.CoreComponents.PrimaryKey)
+    表、项目和属性: 对应 MySQL的表，行，列；mongodb 的集合， 文档， 键
+
+    主键: 建表的时候需要确定主键，主键有两种方式。
+        一：分区键做主键。这里的分区键是唯一的。
+        二：(分区键+排序键)做主键(复合)。分区键可以重复，分区间加排序键构成唯一。
+        PS： DynamoDB有分区的概念，在建二级索引的时候有用到。
+    增删改查是        PutItem — 创建项目。 GetItem — 读取项目。 UpdateItem — 更新项目。 DeleteItem — 删除项目。 都是基于主键做操作的。
+    批量操作(BatchGetItem 和 BatchWriteItem 操作。减少从您的应用程序到 DynamoDB 的网络往返行程数。有数据限制）
+        (例如:一个 BatchGetItem 操作可包含多达 100 个单独的 GetItem 请求且可检索多达 16 MB 的数据。)
+    
+    二级索引:
+        分两种全局二级索引与本地二级索引。(全局二级索引可以在后期创建，本地二级索引需要在创建表时候创建)
+        全局跟本地的区别:在(query,scan)查询时有区别。
+        二级索引的作用:提供查询更多的查询。(query,scan)
+
+    DynamoDB流：
+        初步了解:类似日记操作，记录24小时内的操作，可做恢复使用。
+
+query和scan:
+    query是基于索引或主键进行查询，可以写过滤条件。速度快，但二级索引(二级索引只能指定部分字段)需要设计好，需要考虑是否支持正则查询()
+    scan全表扫码，达到上万条后速度可能会很慢。优点：不需要设计表。缺点:速度慢。
+    当前场景应选择query查询
+
+https://docs.amazonaws.cn/amazondynamodb/latest/developerguide/SecondaryIndexes.html
+二级索引(全局跟本地)(您可以对表创建一个或多个二级索引，然后对这些索引发出 Query 或 Scan 请求。)
+
+
+https://docs.amazonaws.cn/amazondynamodb/latest/developerguide/bp-query-scan.html
+scan扫码优化利用并行扫描
+
+        

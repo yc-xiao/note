@@ -1,0 +1,22 @@
+
+容器
+
+docker pull nginx # docker pull [选项] name[:tag] 获取镜像源
+docker images # 列出本地镜像源
+docker rmi -f {image id}/{repository}:{tag} # 删除镜像源
+
+"""
+--name 指定容器名，"--name my_nginx"指定容器名为"my_nginx";
+-p     映射端口，"-p 80:80"表示映射容器80端口到主机80端口，
+       参数格式ip:hostPort:containerPort | ip::containerPort | hostPort:containerPort | containerPort
+-d     在后台运行，并打印container id
+"""
+
+docker run --name my_nginx -p 80:80 -d nginx # 新建并启动
+
+docker ps # 查看状态
+docker ps -a# 查看所有容器状态
+docker exec -it my_nginx bash # 进入容器
+docker stop my_nginx # 停止容器
+docket start my_nginx # 重启容器
+docker rm my_nginx # 删除容器
