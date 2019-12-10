@@ -1,8 +1,0 @@
-# 查看关系类图
-pyreverse -ASmy -o png
-
-python编码
-机器能识别字节码
-字符串由人识别
-str encode b(字符串以某种格式编码为某种字节码)
-b decode str(字节码以某种格式解析为字符串)
