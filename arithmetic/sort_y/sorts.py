@@ -16,7 +16,7 @@ def ptime(func):
         s1= time.time()
         result = func(*args, **kw)
         s2 = time.time()
-        # print(result)
+        print(result)
         print(func.__name__, (s2-s1))
         print()
         return result
@@ -57,6 +57,16 @@ def insert3(array):
             i -= 1
         array[i] = temp
     return array
+
+# 辅助快排闭区间[]
+def insert4(array, start, end):
+    for i in range(start+1, end+1):
+        temp = array[i]
+        while i > start and temp < array[i-1]:
+            array[i] = array[i-1]
+            i -= 1
+        array[i] = temp
+
 
 def __merge_sort(array):
     count = len(array)
@@ -113,21 +123,62 @@ def __merge_sort2(array):
 # 归并排序
 @ptime
 def merge_sort(array):
-    return __merge_sort(array)
+    _array = copy.deepcopy(array)
+    return __merge_sort(_array)
 
 # 归并排序
 @ptime
 def merge_sort2(array):
-    return __merge_sort2(array)
+    _array = copy.deepcopy(array)
+    return __merge_sort2(_array)
+
+# array[start, end]
+def __so_quick(array, start, end):
+    if end-start < 15:
+        return insert4(array, start, end)
+    if end <= start:
+        return
+    # 随机取一个数进行分割
+    value = array[start]
+    lt_index = start + 1
+    gt_index = end
+    # 当两者相遇时
+    while lt_index < gt_index:
+        while lt_index < gt_index and array[lt_index] <= value:
+            lt_index += 1
+        while lt_index < gt_index and array[gt_index] >= value:
+            gt_index -= 1
+
+        if lt_index < gt_index:
+            temp = array[lt_index]
+            array[lt_index] = array[gt_index]
+            array[gt_index] = temp
+            lt_index += 1
+            gt_index -= 1
+
+    if array[lt_index] > value:
+        lt_index -= 1
+
+    temp = array[lt_index]
+    array[lt_index] = array[start]
+    array[start] = temp
+    __so_quick(array, start, lt_index-1)
+    __so_quick(array, lt_index+1, end)
+
+
+# 快速排序
+@ptime
+def so_quick(array):
+    _array = copy.deepcopy(array)
+    __so_quick(_array, 0, len(_array)-1)
+    return _array
 
 if __name__ == '__main__':
-    array = [random.randint(0, 3) for i in range(10000)]
-    # array = [random.randint(0, 1000) for i in range(10000)]
-    # print(array)
+    array = [random.randint(0, 3) for i in range(100)]
+    # array = [random.randint(0, 20) for i in range(20)]
     print()
     # insert(array)
-    # insert2(array)
-    array_m = copy.deepcopy(array)
-    merge_sort(array_m)
-    array_m2 = copy.deepcopy(array)
-    merge_sort2(array_m2)
+    insert2(array)
+    result = merge_sort(array)
+    # result = merge_sort2(array)
+    result = so_quick(array)
