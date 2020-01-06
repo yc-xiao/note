@@ -1,0 +1,85 @@
+keepalived实现双机热备
+    提供三个功能:
+        管理LVS负载均衡软件(LVS=linux virtual server)
+        实现对LVS集群节点健康检查功能（healthcheck）
+        作为系统网络服务的高可用功能（failover）
+    高可用原理：
+        Keepalived高可用服务之间的故障切换转移，是通过VRRP（Virtual Router Redundancy Protocol，虚拟路由器冗余协议）来实现的。
+        VRRP的出现就是为了解决静态路由的单点故障问题，VRRP是通过一种竞选机制来将路由的任务交给某台VRRP路由器的。
+        也就是说多个路由器(主机)，去竞选一个master(获取到虚拟ip)，master定时想backup主机发送心跳，若无则backup主机出来造反。
+# 下面是keepalived.conf配置信息
+
+global_defs {
+    router_id LVS_Server # 指定标识该机器的route_id
+}
+
+vrrp_instance VI_1 {
+    state MASTER  # 指定该keepalived节点的初始状态，BACKUP主机需要修改
+    interface enp0s8 vrrp # 实例绑定的接口，用于发送VRRP包
+    virtual_router_id 101  # 指定VRRP实例ID，不同keepalived的route_id不一样
+    priority 150  # 指定优先级，优先级高的将成为MASTER
+    nopreempt   # 设置为不抢占。默认是抢占的
+    advert_int 1   # 发送vrrp通过间隔
+    authentication {
+        auth_type PASS  # 指定认证方式, PASS简单密码认证(推荐),AH:IPSEC认证(不推荐)。
+        auth_pass 666666 # 指定认证所使用的密码。
+    }
+    virtual_ipaddress {  
+        192.168.56.254 dev enp0s8  # 指定VIP地址
+    }
+}
+
+virtual_server 192.168.56.254 80 {
+    delay_loop 3 # 健康检查间隔
+    lvs_sched rr # lvs(liunx virtual server)调度算法
+    lvs_method DR # lvs模式
+    protocol TCP  # 4层协议
+    # 多个热备主机的实际ip
+    real_server 192.168.1.211 80 { 
+        weight 1
+        TCP_CHECK {
+            connect_port 80
+            connect_timeout 3
+            nb_get_retry 3
+            delay_before_retry 10
+        }
+        }
+    }
+    real_server 192.168.1.212 80 {
+        weight 1  调整优先级。默认为2
+        TCP_CHECK {
+            connect_port 80   # 连接的端口
+            connect_timeout 3  # 连接超时时间。默认是5s。
+            nb_get_retry 3  # get尝试次数。
+            delay_before_retry 10
+        }
+    }
+}
+# virtual_server 192.168.56.254 443 {
+#     delay_loop 3  delay_loop
+#     lvs_sched rr  LVS的调度算法
+#     lvs_method DR   LVS 模式
+#     protocol TCP  4层协议
+#     real_server 192.168.1.211 443 {
+#         weight 1
+#         TCP_CHECK {
+#             connect_port 443
+#             connect_timeout 3
+#             nb_get_retry 3  get尝试次数
+#             delay_before_retry 10  在尝试之前延迟多长时间
+#         }
+#     }
+#     real_server 192.168.1.212 443 {
+#         weight 1
+#         TCP_CHECK {
+#             connect_port 443
+#             connect_timeout 3
+#             nb_get_retry 3
+#             delay_before_retry 10
+#         }
+#     }
+# }
+
+参考:
+https://www.cnblogs.com/hai-better/p/9964080.html
+https://blog.csdn.net/mofiu/article/details/76644012
