@@ -16,7 +16,7 @@ def ptime(func):
         s1= time.time()
         result = func(*args, **kw)
         s2 = time.time()
-        print(result)
+        # print(result)
         print(func.__name__, (s2-s1))
         print()
         return result
@@ -132,36 +132,31 @@ def merge_sort2(array):
     _array = copy.deepcopy(array)
     return __merge_sort2(_array)
 
+
 # array[start, end]
 def __so_quick(array, start, end):
-    if end-start < 15:
-        return insert4(array, start, end)
     if end <= start:
         return
-    # 随机取一个数进行分割
+    # if end-start < 15:
+    #     insert4(array, start, end)
     value = array[start]
-    lt_index = start + 1
+    lt_index = start
     gt_index = end
-    # 当两者相遇时
+
     while lt_index < gt_index:
         while lt_index < gt_index and array[lt_index] <= value:
             lt_index += 1
         while lt_index < gt_index and array[gt_index] >= value:
             gt_index -= 1
-
         if lt_index < gt_index:
-            temp = array[lt_index]
-            array[lt_index] = array[gt_index]
-            array[gt_index] = temp
+            array[lt_index], array[gt_index] = array[gt_index], array[lt_index]
             lt_index += 1
             gt_index -= 1
 
     if array[lt_index] > value:
         lt_index -= 1
+    array[lt_index], array[start] = array[start], array[lt_index]
 
-    temp = array[lt_index]
-    array[lt_index] = array[start]
-    array[start] = temp
     __so_quick(array, start, lt_index-1)
     __so_quick(array, lt_index+1, end)
 
@@ -173,12 +168,44 @@ def so_quick(array):
     __so_quick(_array, 0, len(_array)-1)
     return _array
 
+# 快排，通过栈处理递归最大深度问题
+@ptime
+def zz_so_quick(array, left, right):
+    if right <= left:
+        return
+    zz = []
+    zz.append((left, right))
+    while zz:
+        left, right = zz.pop()
+        temp = array[left]
+        lindex = left
+        rindex = right
+        while lindex < rindex:
+            while lindex < rindex and array[lindex] <= temp:
+                lindex+=1
+            while lindex < rindex and array[rindex] >= temp:
+                rindex-=1
+            if lindex < rindex:
+                array[lindex], array[rindex] = array[rindex], array[lindex]
+                lindex+=1
+                rindex-=1
+        if array[lindex] > temp:
+            lindex-=1
+        array[lindex], array[left] = array[left], array[lindex]
+
+        if left < lindex-1:
+            zz.append((left, lindex-1))
+        if lindex+1 < right:
+            zz.append((lindex+1, right))
+
 if __name__ == '__main__':
-    array = [random.randint(0, 3) for i in range(100)]
+    array = [random.randint(0, 3) for i in range(10000)]
+    # array = random.sample([i for i in range(100000)], 1000)
     # array = [random.randint(0, 20) for i in range(20)]
     print()
-    # insert(array)
-    insert2(array)
-    result = merge_sort(array)
-    # result = merge_sort2(array)
-    result = so_quick(array)
+    # result1 = insert(array)
+    # result2 = insert2(array)
+    result3 = merge_sort(array)
+    result4 = merge_sort2(array)
+    # result5 = so_quick(array)
+    result5 = zz_so_quick(array, 0, len(array)-1)

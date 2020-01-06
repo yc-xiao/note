@@ -1,31 +1,66 @@
 # 快排 O(n)
-# 这个有点不太对　２３３３３
 import random
+array = random.sample([i for i in range(100000)], 10000)
+array = [random.randint(0, 3) for i in range(10)]
 
-array = random.sample([i for i in range(10000)], 10000)
-
+# [l, r]闭区间
 def so_sort(array, left, right):
     if right <= left:
         return
-    index = random.sample(range(left, right+1), 1)[0]
-    base_num = array[index]
+    temp = array[left]
+    lindex = left
+    rindex = right
+    while lindex < rindex:
+        while lindex < rindex and array[lindex] <= temp:
+            lindex+=1
+        while lindex < rindex and array[rindex] >= temp:
+            rindex-=1
+        if lindex < rindex:
+            array[lindex], array[rindex] = array[rindex], array[lindex]
+            lindex+=1
+            rindex-=1
+    if array[lindex] > temp:
+        lindex-=1
+    array[lindex], array[left] = array[left], array[lindex]
 
-    left_array,right_array, mi_array = [], [], []
-    for i in range(left, right+1):
-        if array[i] > base_num:
-            right_array.append(array[i])
-        elif array[i] < base_num:
-            left_array.append(array[i])
-        else:
-            mi_array.append(array[i])
+    so_sort(array, left, lindex-1)
+    so_sort(array, lindex+1, right)
 
-    array[left: right+1] = left_array + mi_array + right_array
-    so_sort(array, left=left, right=len(left_array)-1)
-    so_sort(array, left=len(left_array) + len(mi_array), right=right)
+
+# 栈处理了递归问题
+def zz_so_sort(array, left, right):
+    if right <= left:
+        return
+    zz = []
+    zz.append((left, right))
+    while zz:
+        left, right = zz.pop()
+        temp = array[left]
+        lindex = left
+        rindex = right
+        while lindex < rindex:
+            while lindex < rindex and array[lindex] <= temp:
+                lindex+=1
+            while lindex < rindex and array[rindex] >= temp:
+                rindex-=1
+            if lindex < rindex:
+                array[lindex], array[rindex] = array[rindex], array[lindex]
+                lindex+=1
+                rindex-=1
+        if array[lindex] > temp:
+            lindex-=1
+        array[lindex], array[left] = array[left], array[lindex]
+
+        if left < lindex-1:
+            zz.append((left, lindex-1))
+        if lindex+1 < right:
+            zz.append((lindex+1, right))
+        # so_sort(array, left, lindex-1)
+        # so_sort(array, lindex+1, right)
 
 def main():
     print(array)
-    so_sort(array, 0, len(array)-1)
+    zz_so_sort(array, 0, len(array)-1)
     print(array)
 
 if __name__ == "__main__":
