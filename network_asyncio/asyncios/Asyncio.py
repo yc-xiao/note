@@ -17,16 +17,3 @@
     async/await 关键字：python3.5用于定义协程的关键字，async定义一个协程，await用于挂起阻塞的异步调用接口。
 
 '''
-
-import asyncio
-
-async def hello():
-    print("Hello world!")
-    r = await asyncio.sleep(1)
-    print("Hello again!")
-
-loop = asyncio.get_event_loop()
-a = loop.create_task(a)
-tasks = [hello(), hello()]
-loop.run_until_complete(asyncio.wait(tasks))
-loop.close()

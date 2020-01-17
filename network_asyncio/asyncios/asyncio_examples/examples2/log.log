@@ -1,0 +1,27 @@
+基本用法:
+    1.执行一个协程，协程内部可以添加任务实现并发
+        asyncio.run(main())
+    2.await， 阻塞当前协程，等待　可等待对象(协程, 任务 和 Future)返回结果。
+        当await时会进入是事件循环，去查看tasks，执行或返回结果
+        await cor/task/future
+    3.创建任务，将一个协程封装程一个任务，并在内部添加到事件循环
+        asyncio.create_task(cor)
+    4.休眠，释放当前携程对cpu的占用，await进入事件循环执行其他任务。
+        await asyncio.sleep(10) # 协程需要通过await调用执行，可联想一下协程yield，send
+    5.批量处理任务，gather
+        asyncio.gather(*tasks) # 返回任务对应的处理结果
+        # return_exceptions默认为False，异常会上抛，中断协程
+        # gather 可以被取消
+    6.批量处理任务，asyncio.wait(tasks_iter, timeout=None, return_when=ALL_COMPLETED)
+        tasks = {asyncio.create_task(func()) for i in range(10)}
+        # 返回结果，done表示future集合，pending表示tasks集合
+        done, pending = await asyncio.wait(tasks)
+    7.其他
+        await asyncio.wait_for(task, timeout) # 超时
+        await = asyncio.shield(task) # 屏蔽取消
+    8.回调绑定
+        def callback(future):
+            pass
+        调用 callback 时，Future 对象是它的唯一参数。
+        可以用 functools.partial() 给回调函数传递参数。
+        task是Future的子类，task.add_done_callback(functools.partial(callback, 2))

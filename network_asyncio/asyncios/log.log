@@ -1,0 +1,12 @@
+异步本质: 事件循环+回调
+python 异步基于生产器，yield改良回调操作，后推出asyncio/await。
+    网络IO阻塞，通过select/epoll实现非阻塞。
+
+非阻塞socker原理:
+    先执行n个任务，遇到非阻塞io不再等待，交给select处理(select监听io操作，如果io可读/写就放到队列中)。
+    n个任务不需要等待，启动完成后。再启动一个loop，读取select的可处理的队列，并重复以上操作。
+    1.add_tasks: 启动n个io任务，并将io任务交给select处理。
+    2.loop: 循环去读select，io可读可写队列，继续任务的下一步操作，如果遇到阻塞再次交给select处理。
+    3.需要注意每个任务占用的cpu时间，是否允许单个长时间占用。
+    4.可以理解为有一个socker数组，select监听数组，可处理数组。循环处理。
+    

@@ -1,0 +1,18 @@
+1.使用异步要导入asyncio，通过asyncio去导入loop。
+2.async， await只是快速说明该操作可以为异步操作。任然需要放入事件循环中，实现并发。
+    PS:添加async的函数不会立刻执行，会返回一个协程对象，需要放入事件中执行。
+3.task，添加一个任务时，内部会自动添加到事件循环中。await决定是否等待任务。
+4.
+
+5.aiohttp
+    # 异步请求，若不在事件中，不并发，效果等同于同步请求
+    async with ClientSession() as session:
+        async with session.get(url) as response:
+6.并发数达到2000个，程序报错。类似迭代层数有限制。
+    1.限制并发数量(优)
+        semaphore = asyncio.Semaphore(500) # 500并发
+        async with semaphore:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url) as response:
+                    return await response.read()
+    2.修改最大并发数

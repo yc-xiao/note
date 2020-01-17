@@ -1,0 +1,5 @@
+1.可迭代对象，具有__iter__方法，该方法必须返回一个新的迭代器
+2.迭代器，具有__next__方法，该方法必须有StopIteration结束迭代，可通过return 返回每次迭代的值
+3.上下文管理器，实现__enter__(self)返回值一般为self，还需要实现__exit__(self)
+4.from contextlib import contextmanager　装饰器，封装上下文
+5.__call__ 实例回调
