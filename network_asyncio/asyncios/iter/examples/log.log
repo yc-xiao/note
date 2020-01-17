@@ -3,3 +3,7 @@
 3.上下文管理器，实现__enter__(self)返回值一般为self，还需要实现__exit__(self)
 4.from contextlib import contextmanager　装饰器，封装上下文
 5.__call__ 实例回调
+
+
+yield， yiled from，　await
+iterator, generator，coroutine
