@@ -7,3 +7,6 @@
 
 yield， yiled from，　await
 iterator, generator，coroutine
+
+使用 async function 可以定义一个 异步函数，在async关键字定义的函数中不能出现yield和yield from
+async 实际是将一个生成器变成可迭代对象，await 操作符后面必须跟一个awaitable对象
