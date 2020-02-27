@@ -66,6 +66,7 @@ def handler_time(cur_time=None, period=None, step=None, reversed=False):
             result.append(datetime(year=year+1, month=1, day=1))
         else:
             result.append(datetime(year=year, month=month+1, day=1))
+        result = result[::-1]
 
     elif period == 'month':
         # 月　间隔为6个月
@@ -89,9 +90,8 @@ def test():
     fake = Factory.create()
     for i in range(10):
         period = choice(periods)
-        reversed = False if period == 'week' else True
         cur_time = fake.date_time()
-        result = handler_time(cur_time=cur_time, period=period, reversed=reversed)
+        result = handler_time(cur_time=cur_time, period=period)
         print(f'''第{i}次测试结果:
             period:{period}, datetime:{cur_time}
             result:{result}
