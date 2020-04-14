@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <script src="/static/login/js/base.js"></script>
+</head>
+<body>
+    <h1>index</h1>
+    {% if user %}
+            <lable>{{ user.name }}</lable><br>
+            <lable>{{ user.info }}</lable><br>
+    {% endif %}
+    <button id="logout">注销</button>
+</body>
+<script src="/static/login/js/base.js"></script>
+</html>
