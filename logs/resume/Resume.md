@@ -3,12 +3,12 @@
      <div>
          <span>
              <img src="assets/phone-solid.svg" width="18px">
-             15390940293
+            &nbsp15390940293
          </span>
-         ·
+        &nbsp&nbsp
          <span>
              <img src="assets/envelope-solid.svg" width="18px">
-             15390940293@163.com
+             &nbsp15390940293@163.com
          </span>
      </div>
  </center>
@@ -22,6 +22,15 @@
 ## <img src="assets/graduation-cap-solid.svg" width="30px"> 教育经历
 
 - 本科，电子科技大学中山学院，计算机科学与技术，2014.9~2018.6
+
+## <img src="assets/tools-solid.svg" width="30px"> 技能介绍
+
+  1. 扎实的计算机基础知识，理解操作系统、计算机组成、网络通信概念。
+  2. 熟悉Python开发，熟练使用Django、Tornado等Web框架。
+  3. 熟悉Linux，能够独立搭建环境。简单配置防火墙，安装部署Nginx等应用服务。
+  4. 熟悉Mysql与MongoDB数据库的特点和使用。
+  5. 了解HTML、CSS、JavaScript，进行页面开发。
+  6. 了解数据结构和算法。
 
 ## <img src="assets/briefcase-solid.svg" width="30px"> 工作经历
 
@@ -44,10 +53,16 @@
   **项目职责**：
 
   1. 使用Rest Framework框架开发接口，简化开发流程。
-  2. 实现日记记录模块，采用MongoDB存储，监控请求。
-  3. 使用Mysql存储样本表等关联数据，使用DynamoDB存储实验产生的可变数据，使用S3桶存储文件数据。
-  4. 使用Celery进行定时任务以及计算任务，通过signal触发统计计算任务，更新统计表。
-  5. 管理样本数据，通过xlwt实现样本信息导入与导出功能。
+
+  2. 使用JWT通过Token进行登录验证。
+
+  3. 实现日记记录模块，采用MongoDB存储，监控请求。
+
+  4. 使用Mysql存储样本表等关联数据，使用DynamoDB存储实验产生的可变数据，使用S3桶存储文件数据。
+
+  5. 使用Celery进行定时任务以及计算任务，通过Signal触发统计计算任务，更新统计表。
+
+  6. 管理样本数据，通过xlwt实现样本信息导入与导出功能。
 
 - #### 用户中心后端系统
 
@@ -60,12 +75,3 @@
     1. 负责用户中心1.0的维护，开发用户中心2.0系统。
     2. 使用Nginx做代理，部署于阿里云，Supervisor进行管理。
     3. 使用Tornado开发，MongoDB存储数据。
-
-## <img src="assets/tools-solid.svg" width="30px"> 技能介绍
-
-1. 扎实的计算机基础知识，理解操作系统、计算机组成、网络通信概念。
-2. 熟悉Python开发，熟练使用Django、Tornado、Flask等Web框架。
-3. 熟悉Linux，能够独立搭建环境。简单配置防火墙，安装部署Nginx等应用服务。
-4. 熟悉Mysql与MongoDB数据库的特点和使用。
-5. 熟悉HTML、CSS、JavaScript，进行页面开发。
-6. 熟悉数据结构和算法。
