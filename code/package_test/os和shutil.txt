@@ -1,0 +1,26 @@
+os
+    os.getcwd() # pwd
+    os.path.join(path1, path2, pathn)
+    os.path.exists(path/dir)
+    os.path.abspath(path) # path绝对路径
+    os.path.dirname(path) # path的上级目录
+    os.path.abspath(__file__) # 文件所在目录
+    os.path.basename(path) # path的文件名
+    os.getenv(env_name, None) # 查找环境变量
+    os.getpid() # 获取进程pid
+    os.listdir(os.getcwd()) # 列出当前目录下文件 ls
+    os.chdir(path) # cd path
+    os.remove(path) # rm path
+    os.replace(oldpath, newpath) # mv opath npath 类似方法 os.rename(), os.renames()
+    os.mkdir(dir) # mkdir 
+    os.makedirs(dir) # mkdir -r 
+    os.removedirs(dir) # rm -r dir 非空
+shutil
+    shutil.rmtree() # rm -r dir 
+    shutil.make_archive(basename, format, root_dir) # tar -zxcv basename root_dir
+    shutil.unpack_archive(basename, ex_dir) #
+    shutil.copyfile(oldpath, newpath) # cp opath npath
+    shutil.copytree(olddir, newdir) # cp -r od, nd # 如果nd已存在则报错
+
+    
+    

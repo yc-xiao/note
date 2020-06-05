@@ -13,3 +13,10 @@ python 异步基于生产器，yield改良回调操作，后推出asyncio/await�
 一处异步处处异步，首先异步要有事件循环，事件循环会占用cpu。
     模块异步?多个线程，一个线程事件循环，一个线程添加事件?
     应该是不行的
+
+
+总结一下:
+    https://www.ibm.com/developerworks/cn/linux/l-async/index.html
+    同步 内核准备数据， 程序读取数据
+    异步 内核准备数据， 内核将数据移到程序， 并回调函数处理
+    IO阻塞与不阻塞， IO复用epoll是同步操作

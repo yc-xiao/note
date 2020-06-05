@@ -1,0 +1,18 @@
+
+知识点:
+    https://www.cnblogs.com/gongcheng-/p/11938039.html#_label0
+    # RabbitMQ
+    
+    https://yuandongming.blog.csdn.net/article/details/97887774
+    # 动画小人
+
+NB_BOOK:
+    https://www.cnblogs.com/suoning/
+    # 经验总结的有点叼 python/GO讲的很细
+    
+    http://www.zsythink.net/
+    # 这个大哥的博客在讲运维
+
+git:
+    https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/directory.md
+    # 讲Go的
