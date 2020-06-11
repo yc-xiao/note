@@ -10,13 +10,13 @@ docker start <container-id>
     给容器分配一个进程，形成运行的容器
 docker run <image-id>
     相对于 docker create image-id, docker start container-id。
-docker ps 
+docker ps
     获取到正在运行的容器
 docker ps -a
     获取所有状态的容器
 docker stop <container-id>
     向指定容器所在进程发送一个sigterm信号，退出容器(回收进程空间，友好退出)
-docker kiss <container-id>
+docker kill <container-id>
     向指定容器所在进程发送一个SIGKILL信号，杀死容器(回收进程空间，强制退出)
 docker pause <container-id>
     暂停指定容器，但是不会收进程空间，可以重复使用。(假装退出)
@@ -67,7 +67,7 @@ docker import container.tar image_name:tag
     0.直接复制数据 docker cp dir:dir
     1.主机目录直接映射  docker -v 宿主绝对目录/数据卷:容器 # 可以映射单个文件，若无则新增，若有则覆盖。
     2.创建卷映射 docker volume create x; docker -v x:容器内目录
- 
+
 ########################################################################
 网络过程
     创建docker时，会默认创建一个docker0网络(bridge)
@@ -90,6 +90,3 @@ docker import container.tar image_name:tag
     自定义网段可以指定ip
         docker network create --subnet=172.19.0.0/16 unet
         docker run -itd --name u1 --network unet --ip 172.19.0.5 ubuntu:net bash
-        
-        
-

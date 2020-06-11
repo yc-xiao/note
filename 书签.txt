@@ -3,8 +3,10 @@
     https://www.cnblogs.com/gongcheng-/p/11938039.html#_label0
     # RabbitMQ
     
-    https://yuandongming.blog.csdn.net/article/details/97887774
+    https://github.com/stevenjoezhang/live2d-widget
     # 动画小人
+    https://blog.csdn.net/EllieYaYa/article/details/86523010
+    # 异异异步 await 跟 yield from 的爱恨情仇
 
 NB_BOOK:
     https://www.cnblogs.com/suoning/
