@@ -1,0 +1,32 @@
+## https://www.cnblogs.com/zhongyehai/p/10695659.html
+create database helloc default charset utf8 collate utf8_general_ci;
+CREATE USER 'youcan'@'localhost' IDENTIFIED BY 'youcan';
+GRANT ALL ON helloc.* TO 'youcan'@'%' WITH GRANT OPTION;
+
+
+备份数据库所有表:  mysqldump -u root -p database > D:\backup.sql
+备份数据库table表: mysqldump -u root -p database table1 table2 > D:\backup.sql
+
+拷贝数据到数据库: mysql -u root -p database< C:\backup.sql
+建库:
+    CREATE DATABASE IF NOT EXISTS database_name DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
+CREATE DATABASE IF NOT EXISTS kiss_system DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
+删库与跑路:
+    drop databases database_name; 
+多表查询(通过连接join):
+    select a1.name, b1.name FROM A as a1 JOIN B as b1 WHERE a1.id = b1.id;
+外键：
+    从表结构来说，一张表存在一个主键做唯一标识。当需要引用其他表时，可以拿其他表的主键做为外键。
+    一个集合某个属性引用一个对象，多对一。
+    外键约束，先有对象，才能引用对象。先删除集合才能删除对象。
+
+django orm:
+    模型与模型直接可以直接链式查询
+
+
+# Index column size too large. The maximum column size is 767 bytes.
+
+    use databases;
+    set global innodb_file_format = BARRACUDA;
+    set global innodb_large_prefix = ON;
+

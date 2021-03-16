@@ -1,0 +1,26 @@
+1.基本使用:
+    import asyncio
+    async def main():
+        # 等待休眠，由于当前事件只有main，所有不会有其他任务进行并发。
+        await asyncio.sleep(1)
+        await asyncio.sleep(1)
+
+    # 执行一个协程，main必须是一个协程，run会实现loop以及旧版的run_until_complete
+    asyncio.run(main())
+2.创建任务，实现并发
+    import asyncio
+    import time
+
+    async def say_after(delay, what):
+        await asyncio.sleep(delay)
+        print(what)
+    
+    async def main():
+        print('start')
+        # 任务会自动添加到队列中，由于没有await，主线程会继续执行
+        asyncio.create_task(say_after(1, 'helloc'))
+        await asyncio.create_task(say_after(2, 'hellocc'))
+        print('end')
+    
+    asyncio.run(main())
+    

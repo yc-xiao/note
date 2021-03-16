@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test</title>
+</head>
+<style>
+    /* 没有固定大小，则由内容撑开 */
+    body {
+        background-image: url('../static/imgs/2.png');
+        background-size: 10%;
+        background-repeat: no-repeat;
+    }
+    div {
+        border:2px solid;
+        width: 100%;
+        height: 300px; /* height: 100% 不占高度 */
+    }
+    div[x] {
+        color: red;
+        line-height: 100px;
+        text-align: center;
+    }
+</style>
+<body>
+    <!-- 属性可以自定义设置 -->
+    <div x="2">
+        <div>
+            <p>今天天气真好</p>
+        </div>
+        <div>
+            <span>今天天气真好</p>
+        </div>
+    </div>
+</body>
+</html>

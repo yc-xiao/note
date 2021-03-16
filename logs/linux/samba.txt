@@ -1,0 +1,9 @@
+Windows访问Samba \\192.168.0.1
+linux 有界面 smb://192.168.2.106
+      无界面　mount -t cifs -o username=root,password=123456 //192.168.0.101 /mnt/
+samba:
+    1. 安装与下载yum/apt-get samba
+    2. 配置防火墙，firewall-cmd --permanent --add-service=samba。并更新配置
+    3. 配置[global][共享目录]
+    4. 添加smb用户(用户必须存在linux中,密码可与系统用户密码不一致)smbpasswd -a
+    5. 共享目录需要有权限，还需要主要SELinux

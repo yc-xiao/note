@@ -1,0 +1,115 @@
+# init 2~4 通过命令行进入无界面终端  == ctrl+shift+2，　startx或 init 5回到界面
+    https://jingyan.baidu.com/article/4853e1e5c0bed35908f72676.html
+# w命令可以查看当下系统用户，ttp实际终端，pts虚拟终端
+# cat /proc/version 可以查看系统版本
+# smba 可用于共享文件服务，可将共享的文件目录通过moute挂载到本地
+
+# 查看网络情况
+   netstat -nap # a(所有) p(进程号) n(数字)    
+# route路由
+   路由分为网关跟单个路由
+   route add -net 192.168.1.0/24 gw 192.168.2.1 # 发送到网段192.168.1.0/24的数据转发给192.168.2.1
+   route delete -net 192.168.1.0/24 # 删除该网段
+   route add 192.168.1.1 gw 192.168.2.1 # 发送到192.168.1.1的数据转发给192.168.2.1
+   route delete 192.168.1.1 # 删除该ip
+   # route默认为-host，所以对于ip操作，可以不加-host。add/delete ip/网段需要指明
+   流程:
+    1.配置网关 route add default gw 192.168.56.1
+    2.主机为192.168.56.1开启路由转发功能(防火墙)   
+    3.如果访问不了域名，需要配置一下dns
+
+# 启动服务
+    https://blog.csdn.net/qq_36119192/article/details/82415113
+    server httpd start              (对于支持service的程序，安装的时候，会自动的在 /etc/init.d 目录添加一个配置文件。)
+    systemctl start httpd.service   (对于支持systemd的程序，安装的时候，会自动的在/usr/lib/systemd/system目录添加一个配置文件。)
+    https://blog.csdn.net/AsWeDo/article/details/90345065
+    设置/禁止服务开机自动启动
+    systemctl [enable|disable] [servicename]
+        start：立刻启动后面接的 unit。
+        stop：立刻关闭后面接的 unit。
+        restart：立刻关闭后启动后面接的 unit，亦即执行 stop 再 start 的意思。
+        reload：不关闭 unit 的情况下，重新载入配置文件，让设置生效。
+        enable：设置下次开机时，后面接的 unit 会被启动。
+        disable：设置下次开机时，后面接的 unit 不会被启动。
+        status：目前后面接的这个 unit 的状态，会列出有没有正在执行、开机时是否启动等信息。
+        is-active：目前有没有正在运行中。
+        is-enable：开机时有没有默认要启用这个 unit。
+        kill ：不要被 kill 这个名字吓着了，它其实是向运行 unit 的进程发送信号。
+        show：列出 unit 的配置。
+        mask：注销 unit，注销后你就无法启动这个 unit 了。
+        unmask：取消对 unit 的注销。
+# 防火墙
+    firewalld(高级API)
+        firewall-cmd --state # 查询状态
+        firewall-cmd --permanent --add-port=80/tcp　# --add-port添加规则，--permanent每次启动服务器都加载此规则
+        firewall-cmd --permanent --add-service=ssh  # 添加服务，一个服务可能有多个端口。然后可以与端口并存。
+        firewall-cmd --permanent --server=ssh --add-port=8001/tcp # 给ssh服务添加新的端口      
+        firewall-cmd --reload # 重新加载
+        firewall-cmd --list-services # 列出服务
+    iptables(低级API)
+
+# 删除history
+vim ~/.bash_history 
+history -r # 清除缓存        
+
+# 查看文件夹下所有文件是否有某个字段
+    find .| xargs grep -ri "xxx" -l 
+
+# 查看文件大小
+    du -h xxx
+    df -h
+# 查看内存大小
+    free 
+    free -m/g
+# 查看实时文件(日志)
+    tail -f filename
+# 查看cpu
+    cat /proc/cpuinfo| grep "cpu cores" # 查看cpu总核数
+    cat /proc/cpuinfo| grep "physical id" #  查看物理cpu个数 
+    cat /proc/cpuinfo |grep name # cpu型号
+# 其他
+    uname -a # 查看内核/操作系统/CPU信息的linux系统信息命令 
+    head -n 1 /etc/issue # 查看操作系统版本，是数字1不是字母L 
+    cat /proc/cpuinfo # 查看CPU信息的linux系统信息命令 
+    hostname # 查看计算机名的linux系统信息命令 
+    lspci -tv # 列出所有PCI设备 
+    lsusb -tv # 列出所有USB设备的linux系统信息命令 
+    lsmod # 列出加载的内核模块 
+    env # 查看环境变量资源 
+    free -m # 查看内存使用量和交换区使用量 
+    df -h # 查看各分区使用情况 
+    du -sh # 查看指定目录的大小 
+    grep MemTotal /proc/meminfo # 查看内存总量 
+    grep MemFree /proc/meminfo # 查看空闲内存量 
+    uptime # 查看系统运行时间、用户数、负载 
+    cat /proc/loadavg # 查看系统负载磁盘和分区 
+    mount | column -t # 查看挂接的分区状态 
+    fdisk -l # 查看所有分区 
+    swapon -s # 查看所有交换分区 
+    hdparm -i /dev/hda # 查看磁盘参数(仅适用于IDE设备) 
+    dmesg | grep IDE # 查看启动时IDE设备检测状况网络 
+    ifconfig # 查看所有网络接口的属性 
+    iptables -L # 查看防火墙设置 
+    route -n # 查看路由表 
+    netstat -lntp # 查看所有监听端口 
+    netstat -antp # 查看所有已经建立的连接 
+    netstat -s # 查看网络统计信息进程 
+    ps -ef # 查看所有进程 
+    top # 实时显示进程状态用户 
+    w # 查看活动用户 
+    id # 查看指定用户信息 
+    last # 查看用户登录日志 
+    cut -d: -f1 /etc/passwd # 查看系统所有用户 
+    cut -d: -f1 /etc/group # 查看系统所有组 
+    crontab -l # 查看当前用户的计划任务服务 
+    chkconfig –list # 列出所有系统服务 
+    chkconfig –list | grep on # 列出所有启动的系统服务程序 
+    rpm -qa # 查看所有安装的软件包 
+    cat /proc/cpuinfo ：查看CPU相关参数的linux系统命令 
+    cat /proc/partitions ：查看linux硬盘和分区信息的系统信息命令 
+    cat /proc/meminfo ：查看linux系统内存信息的linux系统命令 
+    cat /proc/version ：查看版本，类似uname -r 
+    cat /proc/ioports ：查看设备io端口 
+    cat /proc/interrupts ：查看中断 
+    cat /proc/pci ：查看pci设备的信息 
+    cat /proc/swaps ：查看所有swap分区的信息

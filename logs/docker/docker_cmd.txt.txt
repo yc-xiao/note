@@ -1,0 +1,96 @@
+http://dockone.io/article/783
+镜像:实质是一层层(只读文件)构成，用户只看到了一层(镜像，只读文件)。
+容器:容器在镜像的最上层添加了读写层。(镜像+读写层)
+运行的容器:给容器分配了一个进程。(镜像->读写层->进程<-主机系统)
+cmd
+
+docker create <image-id>
+    给镜像新增一个读写层，形成容器
+docker start <container-id>
+    给容器分配一个进程，形成运行的容器
+docker run <image-id>
+    相对于 docker create image-id, docker start container-id。
+docker ps 
+    获取到正在运行的容器
+docker ps -a
+    获取所有状态的容器
+docker stop <container-id>
+    向指定容器所在进程发送一个sigterm信号，退出容器(回收进程空间，友好退出)
+docker kiss <container-id>
+    向指定容器所在进程发送一个SIGKILL信号，杀死容器(回收进程空间，强制退出)
+docker pause <container-id>
+    暂停指定容器，但是不会收进程空间，可以重复使用。(假装退出)
+docker rm <container-id>
+    删除容器的可读层，前提容器停止
+docker rmi <image-id>
+    删除镜像
+docker commit <container-id>
+    docker commit命令将容器的可读写层转换为一个只读层，这样就把一个容器转换成了不可变的镜像
+docker exec <running-container-id>
+    docker exec 命令会在运行中的容器执行一个新进程
+docker inspect <container-id> or <image-id>
+    docker inspect命令会提取出容器或者镜像最顶层的元数据。
+docker save <image-id>
+    docker save命令会创建一个镜像的压缩文件，这个文件能够在另外一个主机的Docker上使用。和export命令不同，这个命令为每一个层都保存了它们的元数据。这个命令只能对镜像生效。
+docker export <container-id>
+    docker export命令创建一个tar文件，并且移除了元数据和不必要的层，将多个层整合成了一个层，只保存了当前统一视角看到的内容（译者注：expoxt后的容器再import到Docker中，通过docker images –tree命令只能看到一个镜像；而save后的镜像则不同，它能够看到这个镜像的历史镜像）。
+
+
+https://www.cnblogs.com/kevingrace/p/5715326.html
+
+docker attach <container-id>
+    当交互容器停止时，可以通过docker attach 进行交互
+docker commit container-id/image-id <image_name>:tag
+
+docker cp CONTAINER:PATH LOCALPATH(LOCALPATH CONTAINER:PATH)
+    从宿主机复制文件到容器，或者从容器复制数据到宿主机
+
+docker diff container-id
+    查询容器新增数据
+
+docker exec -d container-id touch helloc.txt # 指定容器执行某个命令
+docker exec -it container-id /bin/bash # 重新开一个进程，进行交互。
+
+docker export container > container.tar
+docker import container.tar image_name:tag
+
+######################################################################
+1.docker run -it --name n1 nginx /bin/bash # 启动容器执行/bin/bash命令，nginx服务未启动
+2.exit # 退出容器，容器停止
+3.docker start n1 # 启动容器，nginx未启动
+4.docker exec -it n1 # 开新的进程与容器交互，随便启动nginx
+5.nginx　# 在容器内启动nginx
+6.exit # 容器还是启动，且nginx启动
+
+#######################################################################
+数据管理
+    0.直接复制数据 docker cp dir:dir
+    1.主机目录直接映射  docker -v 宿主绝对目录/数据卷:容器 # 可以映射单个文件，若无则新增，若有则覆盖。
+    2.创建卷映射 docker volume create x; docker -v x:容器内目录
+ 
+########################################################################
+网络过程
+    创建docker时，会默认创建一个docker0网络(bridge)
+        bridge模式(相同网段的容器可以通信，容器可以跟主机通信)
+        overlay模式(网络允许我们跨多台宿主机进行通讯，需要在特殊情况下)
+
+    docker -p host_ip:host_port:container_port
+        docker -p 80:80| 127.0.0.1:80:80| 127.0.0.1::80
+        # 主机所有ip的80映射到容器80，主机localhost:80映射到容器80，主机localhost:随机端口映射到容器80
+        # 只能使用宿主机一个端口
+        # 默认使用bridge(docker0)[172.17.0.0/16]，容器内可以相互通信(相同网段)
+
+    容器互联，可以手动创建docker(类似docker0)网络，在使用容器的时候指定端口
+        docker network create net1 # (网段一般为172.18.0.0/16)
+        docker --network net1 # 这里的网段可以与主机拼通，但与其他容器网段隔离
+    不同网段容器互相访问，可以将容器加到另一个容器所在的网段
+        docker network connect bridge n2
+    不同容器
+        docker　删除commit之前的版本会删除关联的文件，导致错误，删除时需要注意
+    自定义网段可以指定ip
+        docker network create --subnet=172.19.0.0/16 unet
+        docker run -itd --name u1 --network unet --ip 172.19.0.5 ubuntu:net bash
+
+        
+        
+

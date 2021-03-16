@@ -1,0 +1,10 @@
+django rest framework
+    CBV class base view
+    FBV func  base view
+
+rest规范是一种建议，减少路由和视图。
+    1.根据methods方式，做相应操作(CDUG)。
+
+django rest_framework
+APIView对View加了一层封装，其中在dispath()入口对request.user进行验证处理。
+APIView在as_view()方法中，取消了crsf的认证。

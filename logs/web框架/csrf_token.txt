@@ -1,0 +1,2 @@
+csrf_token
+rest_api 通过token认证，默认取消了csrftoken的认证

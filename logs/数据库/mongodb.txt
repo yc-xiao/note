@@ -1,0 +1,45 @@
+0.其他
+    db.oIT_report.distinct("batch_serial_number",{'uuid':'73cd68da-de66-11e9-9c55-000c29373966'}) 
+    help() # 可以查询其他命令
+    db.stat()
+
+1.查询状态分析
+    db.test.find({"id":13}).explain('executionStats') # 分析查询状态
+2.数据库复制
+    db.copyDatabase(fromdb,todb,fromhost,username,password,mechanism)
+    fromdbt: 源db； todb: 目标db； fromhost: 源db的主机地址，如果在同一个mongod实例内可以省略；
+    username: 如果开启了验证模式，需要源DB主机上的MongoDB实例的用户名； password: 同上，需要对应用户的密码；
+3.数据库备份与恢复
+    mongodump --db database_name --collection collection_name(默认所有表) --out dir(输入到指定目录)
+    mongorestore -h <hostname><:port> -d dbname <path>
+
+4.复合索引的顺序有没有区别
+# 复合索引
+    (1表示升序(从低到高) -1表示降序(从高到低))
+    # db.test.ensureIndex({})在新版本中,ensureIndex(弃用)是createIndex的一个别名
+    db.test.createIndex({"key1":1, "key2":1})  
+    搜索时，db.test.find({"key1":xxx}) 会使用到索引
+    搜索时，db.test.find({"key2":xxx}) 不会使用到索引,先检索key1
+    搜索时，db.test.find({"key2":"", "key1":xxx}) 会使用到索引
+5.全文索引搜索
+    全文不是模糊匹配，
+    value = 'abc ded f'
+    key = a匹配不到，全文搜索可以匹配abc,ded, f
+    全文索引的创建方法：
+    db.createIndex({key:"text"})
+    db.createIndex({key1:"text",key2:"text"})
+    db.createIndex({"$**":"text",key2:"text"})
+    
+    mongodb全文索引查询的用法：
+    db.test.find({$text:{$search:"coffee"}}) #查询包含coffee的内容的文档
+    db.test.find({$text:{$search:"aa bb cc"}}) #（或查询）查询包含aa或bb或cc的内容的文档
+    db.test.find({$text:{$search:"aa bb -cc"}}) #-为排除包含有cc内容的文档
+    db.test.find({$text:{$search:"\"aa\" \"bb\" \"cc\""}}) #（与查询）加查询内容前加上\"，查询既包含aa又包含bb cc的内容的文档。
+    
+    全文索引的限制：
+    一个集合只能创建一个全文索引，每次查询只能指定一个$text查询
+    可能还有其他限制，在查询的时候。
+    
+
+
+

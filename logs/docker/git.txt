@@ -1,0 +1,43 @@
+git ssh
+    1.生成公钥，并添加到远程仓库
+    2.检测仓库下的git配置origin来源，如果是https下载则默认是http方式，改为ssh
+
+stash 存储:
+    git stash save "save message" # 添加备注
+    git stash list # 查看存储
+    git stash show stash@{num} -p # 打印存储
+    git stash apply stash@{num} # 应用存储
+    git stash drop stash@{num}  # 删除存储 
+commit:
+    git commit --amend # 修改上一次提交，PS：已推送的无法修改
+
+log查询:
+    git log|grep 'youcan' -A3 -B1
+    git show 'commit_id'
+
+差异对比:
+    Git diff branch1 branch2 --stat   //显示出所有有差异的文件列表
+    Git diff branch1 branch2 文件名(带路径)   //显示指定文件的详细差异
+    Git diff branch1 branch2                   //显示出所有有差异的文件的详细差异
+
+常用操作：
+    git push origin --delete yc_feature_dynamoDB(删除远程分支)
+    
+
+
+git子项目，在实际项目中调用到公用的子项目(在子项目内本身也是一个git)。
+    0.添加子项目:
+        想主项目内添加子项目，git submodule add https://B.git   
+        # 会生成.gitmodules，与B，提交
+    1.其他位置clone项目时，子项目为空，需要另外克隆子项目。
+        git clone https://B.git --recursive
+        
+    2.不参与修改(直接引用)
+        可以删除子项目.git文件
+
+    3.参与修改    
+    1.初始化本地子模块配置文件
+    git submodule init
+    2.更新项目，抓取子模块内容。
+    git submodule update
+    https://segmentfault.com/a/1190000009928515
