@@ -1,20 +1,12 @@
+https://www.cnblogs.com/gongcheng-/p/11938039.html#_label0
+# RabbitMQ
 
-知识点:
-    https://www.cnblogs.com/gongcheng-/p/11938039.html#_label0
-    # RabbitMQ
-    
-    https://github.com/stevenjoezhang/live2d-widget
-    # 动画小人
-    https://blog.csdn.net/EllieYaYa/article/details/86523010
-    # 异异异步 await 跟 yield from 的爱恨情仇
+https://github.com/stevenjoezhang/live2d-widget
+# 动画小人
+https://blog.csdn.net/EllieYaYa/article/details/86523010
+# 异步 await 跟 yield from 的爱恨情仇
 
-NB_BOOK:
-    https://www.cnblogs.com/suoning/
-    # 经验总结的有点叼 python/GO讲的很细
-    
-    http://www.zsythink.net/
-    # 这个大哥的博客在讲运维
 
-git:
-    https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/directory.md
-    # 讲Go的
+https://www.cnblogs.com/suoning/ # Python/GO
+http://www.zsythink.net/ # 运维
+https://github.com/unknwon/the-way-to-go_ZH_CN/blob/master/eBook/directory.md # Go的

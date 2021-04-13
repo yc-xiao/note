@@ -1,0 +1,6 @@
+# cal2.pyc是cal.py的pyc文件
+# python => shell
+# 可读到pyc的文件
+from cal2 import add 
+from new_pdb import pdb
+pdb(add, 1,2)

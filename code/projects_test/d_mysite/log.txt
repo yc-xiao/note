@@ -1,8 +1,0 @@
-1.先实现用户登录功能
-    1.1 用户登录 cookies 与 session
-        1.1.1 cookies是否能被伪造，session如何应对分布式
-        1.1.2 cookies怎么防止csrf_token
-    1.2 用户登录认证token
-        1.2.1 为什么要用Token
-2.用户认证权限功能
-3.rest_api
