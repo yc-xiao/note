@@ -56,19 +56,18 @@ class SemaphoreRedis:
         """
         self.redis_obj = redis_obj
         self.name = name
-        # 多次初始化SemaphoreRedis，仅第一次有效，N与NK记录全局的N字段
-        self.N = 0
-        self.NK = f'{name}-N-KEY'
-        
-        # 多次初始化，仅设置第一个N值，并记录，nx表示存在则不做操作
+
+        # 多次初始化SemaphoreRedis，仅第一次设置n值，N与NK记录全局的n字段
+        self.N, self.NK = 0, f'{name}-N-KEY'
         self.redis_obj.set(name, n, nx=True)
         self.redis_obj.set(self.NK, n, nx=True)
         
         # 记录实例个数，当__del__时判断是否有存活的实例
-        self.All = f'{name}-All-instance'        
         self.auto_delete = auto_delete
-        if auto_delete:
-            self.redis_obj.incr(self.All)
+        self.All = f'{name}-All-instance'        
+        self.redis_obj.incr(self.All)
+
+        # 设置过期时间
         self.expire(expire)
 
     def __del__(self):
