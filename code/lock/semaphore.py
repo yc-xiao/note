@@ -1,8 +1,10 @@
 from contextlib import contextmanager
+import threading
 import redis
 import time
+import os
 
-redis_obj = redis.Redis()
+redis_obj = redis.Redis(decode_responses=True)
 
 """
     基于redis实现自旋锁
@@ -11,29 +13,37 @@ redis_obj = redis.Redis()
 def unlock_by_redis(key='lock'):
     redis_obj.delete(key)
 
-def lock_by_redis(key='lock', expire=2):
+def lock_by_redis(key='lock', expire=2, increase=True, R=True):
     """
         使用redis实现自旋锁
-            通过设置过期时间expire=2，预防死锁
-            多次拿锁，睡眠时间会从0.1递增到0.5
+            key 设置锁名称
+            expire 设置使用锁的时间单位s, 过期自动归还锁
+            increase 设置抢锁时间是否递增(0.1~0.5)，默认开启
+            R 设置是否允许多次/递归调用
     """
     sleep_time = 0.1
-    while redis_obj.incr(key) !=1:
+    value = f'{os.getpid()}-{threading.get_ident()}' if R else 1
+    # 当key不存在时，存入key值。即第一个线程可以获取锁，并设置过期时间。
+    # 后面的线程只能等锁释放或锁过期后再获取锁并设置过期时间
+    while not redis_obj.set(key, value, ex=expire, nx=True):
+        # 当R为True时，判断key与value是否一致，而redis获取的value可能是未处理的字符或已处理的字符串
+        if R and redis_obj.get(key) in (value, value.encode()):
+            break
         time.sleep(sleep_time)
-        sleep_time = sleep_time * 2
-        if sleep_time > 0.5:
-            sleep_time = 0.5
-    redis_obj.expire(key, expire)
+        if increase:
+            sleep_time = sleep_time * 2
+            if sleep_time > 0.5:
+                sleep_time = 0.5
 
 @contextmanager
-def lock_redis(key='lock', expire=2):
+def lock_redis(key='lock', expire=2, increase=True, R=True):
     """
         # 支持多进程多线程，可通过expire参数设置取锁时间
         with lock_redis():
             func() # 执行函数
     """
     try:
-        yield lock_by_redis(key, expire=expire)
+        yield lock_by_redis(key, expire=expire, increase=increase, R=R)
     except Exception as e:
         raise e
     finally:

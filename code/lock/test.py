@@ -49,6 +49,17 @@ def test_with_lock(N=5, work_time=1):
     test_threads(func=with_lock, num=N)
     test_multiprocessing(func=with_lock, num=N)
 
+# 多线程多进程，测试互斥R锁
+def test_with_r_lock(N=5, work_time=2):
+    def with_r_lock(text='ok'):
+        key, R, increase = 'aa', True, True
+        with lock_redis(key=key, expire=10, R=R, increase=increase):
+            with lock_redis(key=key, expire=10, R=R, increase=increase):
+                time.sleep(work_time) # 模拟工作
+        print(text)
+    test_threads(func=with_r_lock, num=N)
+    test_multiprocessing(func=with_r_lock, num=N)
+
 # 多线程多进程，测试单个信号量
 def test_semaphore_lock(N=5, work_time=1):
     def semaphore_lock(text='ok'):
@@ -73,9 +84,10 @@ def test_semaphore_N_lock(N=5, work_time=1):
 def test():
     test_not_lock()
     test_with_lock()
+    test_with_r_lock()
     test_semaphore_lock()
     test_semaphore_N_lock()
     return
 
 if __name__ == '__main__':
-    test()
+    pass
