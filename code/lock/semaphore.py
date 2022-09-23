@@ -5,7 +5,7 @@ import time
 redis_obj = redis.Redis()
 
 """
-    基于redis实现自旋锁与信号量
+    基于redis实现自旋锁
 """
 
 def unlock_by_redis(key='lock'):
@@ -38,6 +38,10 @@ def lock_redis(key='lock', expire=2):
         raise e
     finally:
         unlock_by_redis(key)
+
+"""
+    基于redis实现信号量
+"""
 
 class SemaphoreRedis:
     def __init__(self, redis_obj=None, name='s', n=1, expire=60, auto_delete=True):
@@ -83,6 +87,12 @@ class SemaphoreRedis:
         sec = sec * 2
         return sec if sec <= 0.5 else 0.5
 
+    def _get_N(self):
+        if not self.N:
+            n = self.redis_obj.get(self.NK) or '0'
+            self.N = int(n)
+        return self.N
+
     def destroy(self):
         # 手动销毁
         self.redis_obj.delete(self.All)
@@ -103,13 +113,9 @@ class SemaphoreRedis:
             sleep_time = self._sleep(sleep_time)
 
     def V(self):
-        if not self.N:
-            n = self.redis_obj.get(self.NK) or '0'
-            self.N = int(n)
-
         # 信号量+1>N，等待
         sleep_time = 0.1
-        while self._incr() > self.N:
+        while self._incr() > self._get_N():
             self._decr()
             sleep_time = self._sleep(sleep_time)
 
