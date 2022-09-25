@@ -52,7 +52,7 @@ def test_with_lock(N=5, work_time=1):
 # 多线程多进程，测试互斥R锁
 def test_with_r_lock(N=5, work_time=2):
     def with_r_lock(text='ok'):
-        key, R, increase = 'aa', True, True
+        key, R, increase = 'aa', True, False
         with lock_redis(key=key, expire=10, R=R, increase=increase):
             with lock_redis(key=key, expire=10, R=R, increase=increase):
                 time.sleep(work_time) # 模拟工作
@@ -90,4 +90,6 @@ def test():
     return
 
 if __name__ == '__main__':
+    # test_with_lock(work_time=0.1)
+    # test_with_r_lock(work_time=0.1)
     pass
