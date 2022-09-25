@@ -10,10 +10,28 @@ redis_obj = redis.Redis(decode_responses=True)
     基于redis实现自旋锁
 """
 
-def unlock_by_redis(key='lock'):
-    redis_obj.delete(key)
+def _unlock_by_redis(key='lock', R=True):
+    """
+        key 锁名称
+        R 代表循环锁, r_key记录循环次数
+    """
+    # 只能释放当前线程未过期的锁
+    value = f'{os.getpid()}-{threading.get_ident()}'
+    if redis_obj.get(key) not in (value, value.encode()):
+        return 
 
-def lock_by_redis(key='lock', expire=2, increase=True, R=True):
+    r_key = f'R-{key}'
+    # 非循环锁时，直接释放锁
+    if not R:
+        redis_obj.delete(key)
+        redis_obj.delete(r_key)
+    else:
+        # 当循环锁decr<=0时，表示在最外层，释放锁
+        if redis_obj.decr(r_key) <= 0:
+            redis_obj.delete(r_key)
+            redis_obj.delete(key)
+
+def _lock_by_redis(key='lock', expire=2, increase=True, R=True):
     """
         使用redis实现自旋锁
             key 设置锁名称
@@ -22,7 +40,7 @@ def lock_by_redis(key='lock', expire=2, increase=True, R=True):
             R 设置是否允许多次/递归调用
     """
     sleep_time = 0.1
-    value = f'{os.getpid()}-{threading.get_ident()}' if R else 1
+    value = f'{os.getpid()}-{threading.get_ident()}'
     # 当key不存在时，存入key值。即第一个线程可以获取锁，并设置过期时间。
     # 后面的线程只能等锁释放或锁过期后再获取锁并设置过期时间
     while not redis_obj.set(key, value, ex=expire, nx=True):
@@ -34,6 +52,10 @@ def lock_by_redis(key='lock', expire=2, increase=True, R=True):
             sleep_time = sleep_time * 2
             if sleep_time > 0.5:
                 sleep_time = 0.5
+    if R:
+        r_key = f'R-{key}'
+        redis_obj.set(r_key, 0, ex=expire, nx=True)
+        redis_obj.incr(r_key)
 
 @contextmanager
 def lock_redis(key='lock', expire=2, increase=True, R=True):
@@ -43,11 +65,13 @@ def lock_redis(key='lock', expire=2, increase=True, R=True):
             func() # 执行函数
     """
     try:
-        yield lock_by_redis(key, expire=expire, increase=increase, R=R)
+        yield _lock_by_redis(key, expire=expire, increase=increase, R=R)
     except Exception as e:
+        # 程序异常，跳过循环锁，直接释放锁
+        _unlock_by_redis(key, R=False)
         raise e
     finally:
-        unlock_by_redis(key)
+        _unlock_by_redis(key, R=R)
 
 """
     基于redis实现信号量
