@@ -1,5 +1,3 @@
-module 2023/go-test-project
+module yc/go-test
 
 go 1.17
-
-// replace 2023/go-test-project => ./

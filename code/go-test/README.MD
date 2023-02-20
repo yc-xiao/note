@@ -1,0 +1,2 @@
+- Go语言圣经(https://golang-china.github.io/gopl-zh/index.html) => bible
+- 前景(https://www.topgoer.com/) => topgoer

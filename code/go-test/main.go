@@ -1,7 +1,11 @@
 package main
 
-import "2023/go-test-project/example"
+import (
+	b "yc/go-test/bible/example"
+	t "yc/go-test/topgoer/example"
+)
 
 func main() {
-	example.TestReflect()
+	b.TestBible()
+	t.TestTopgoer()
 }

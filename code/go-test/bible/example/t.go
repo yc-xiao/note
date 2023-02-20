@@ -1,6 +1,7 @@
 package example
 
 import (
+	"fmt"
 	"os"
 	"strings"
 )
@@ -20,4 +21,9 @@ func F1_1() {
 // F1_2 -
 func F1_2() {
 	_ = strings.Join(args[1:], " ")
+}
+
+// TestBible test
+func TestBible() {
+	fmt.Println("test bible!")
 }
