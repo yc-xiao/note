@@ -2,7 +2,7 @@ package example
 
 import "fmt"
 
-// TestTopgoer test
-func TestTopgoer() {
+// ExTopgoer ex
+func ExTopgoer() {
 	fmt.Println("test topgoer!")
 }
