@@ -5,8 +5,8 @@ import (
 )
 
 func init() {
-	fmt.Println("同一个文件，多个init包按从上到下的顺序执行；")
-	fmt.Printf("同一个包，不同文件的init包按文件名的顺序执行。\n")
+	// fmt.Println("同一个文件，多个init包按从上到下的顺序执行；")
+	// fmt.Printf("同一个包，不同文件的init包按文件名的顺序执行。\n")
 }
 
 // ExVariableError 变量常见错误
