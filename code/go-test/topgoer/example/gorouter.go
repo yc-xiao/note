@@ -57,3 +57,18 @@ func ExSelect() {
 	v, ok = <-msg[3] // 已关闭信道可读，返回信道类型的默认值，状态为false
 	fmt.Println("gobal end", v, ok)
 }
+
+// ExFor 测试for range chan
+func ExFor() {
+	ch := make(chan int, 2)
+	go func() {
+		for i := 0; i < 10; i++ {
+			ch <- i
+			fmt.Println("a", i)
+		}
+		close(ch)
+	}()
+	for i := range ch {
+		fmt.Println("b", i)
+	}
+}
