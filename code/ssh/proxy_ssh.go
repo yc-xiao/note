@@ -11,6 +11,7 @@ import (
 	"io/ioutil"
 	"log"
 	"math/rand"
+	"net"
 	"os"
 	"os/exec"
 	"strings"
@@ -46,6 +47,11 @@ func main() {
 	proxyPort := flag.String("proxyPort", "22", "-proxyPort 22")
 	flag.Usage = usage
 	flag.Parse()
+
+	// 检测远程端口是否能使用
+	if _, err = net.Dial("tcp", net.JoinHostPort(*proxyIP, *remotePort)); err == nil {
+		log.Fatalln("远程端口已使用")
+	}
 
 	// 检测ssh隧道是否开启
 	checkCMD := fmt.Sprintf("ps -aux|grep %s@%s|grep %s|grep -vE 'grep'", *proxyUser, *proxyIP, *remotePort)
