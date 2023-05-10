@@ -50,13 +50,13 @@ func main() {
 
 	// 检测远程端口是否能使用
 	if _, err = net.Dial("tcp", net.JoinHostPort(*proxyIP, *remotePort)); err == nil {
-		log.Fatalln("远程端口已使用")
+		log.Fatalf("远程端口%s被占用，请使用 -remotePort 切换端口\n", *remotePort)
 	}
 
 	// 检测ssh隧道是否开启
 	checkCMD := fmt.Sprintf("ps -aux|grep %s@%s|grep %s|grep -vE 'grep'", *proxyUser, *proxyIP, *remotePort)
 	if err = exec.Command("bash", "-c", checkCMD).Run(); err == nil {
-		log.Printf("ssh隧道已存在，使用命令%s查询\n", checkCMD)
+		log.Printf("ssh隧道已存在，使用命令  %s  查询\n", checkCMD)
 		return
 	}
 
