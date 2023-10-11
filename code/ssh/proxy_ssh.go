@@ -8,7 +8,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"math/rand"
 	"net"
@@ -43,8 +42,9 @@ func main() {
 	remoteIP := flag.String("remoteIP", "0.0.0.0", "-remoteIP 0.0.0.0")
 	remotePort := flag.String("remotePort", "22", "-remotePort 22")
 	proxyIP := flag.String("proxyIP", "192.168.1.1", "-proxyIP 192.168.1.1")
-	proxyUser := flag.String("proxyUser", "test", "-user test")
+	proxyUser := flag.String("proxyUser", "test", "-proxyUser test")
 	proxyPort := flag.String("proxyPort", "22", "-proxyPort 22")
+	serverAliveInterval := flag.String("serverAliveInterval", "-1", "-serverAliveInterval -1")
 	flag.Usage = usage
 	flag.Parse()
 
@@ -61,22 +61,27 @@ func main() {
 	}
 
 	// 生成临时文件
-	rand.Seed(time.Now().Unix())
+	rand.New(rand.NewSource(time.Now().Unix()))
 	tempFilePath := fmt.Sprintf("/tmp/%d", rand.Intn(1000)+100000)
-	err = ioutil.WriteFile(tempFilePath, []byte(data), 0600)
+	err = os.WriteFile(tempFilePath, []byte(data), 0600)
 	checkError(err)
 
 	// 开启ssh隧道
 	// ssh -R remoteIP:remotePort:localhost:localPort proxyUser@proxyIP -p proxyPort -i private.pem -N
-	cmdString := fmt.Sprintf("ssh -R %s:%s:%s:%s %s@%s -p %s -i %s -N", *remoteIP, *remotePort, *localIP, *localPort, *proxyUser, *proxyIP, *proxyPort, tempFilePath)
+	cmdString := ""
+	if *serverAliveInterval != "-1" {
+		cmdString = fmt.Sprintf("ssh -o ServerAliveInterval=%s -R %s:%s:%s:%s %s@%s -p %s -i %s -N", *serverAliveInterval, *remoteIP, *remotePort, *localIP, *localPort, *proxyUser, *proxyIP, *proxyPort, tempFilePath)
+	} else {
+		cmdString = fmt.Sprintf("ssh -R %s:%s:%s:%s %s@%s -p %s -i %s -N", *remoteIP, *remotePort, *localIP, *localPort, *proxyUser, *proxyIP, *proxyPort, tempFilePath)
+	}
 	log.Println(cmdString)
 	cmdList := strings.Split(cmdString, " ")
 	cmd := exec.Command(cmdList[0], cmdList[1:]...)
 	err = cmd.Start()
 	checkError(err)
 
-	// 等待3秒后移除文件
-	time.Sleep(3 * time.Second)
+	// 等待1秒后移除文件
+	time.Sleep(1 * time.Second)
 	err = os.Remove(tempFilePath)
 	checkError(err)
 

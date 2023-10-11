@@ -1,0 +1,16 @@
+ssh
+    正向代理
+        前提: 服务器A -> 服务器B -> 服务器C，A无法直接访问C
+        服务器A运行下面命令，将A的端口通过B映射到C
+            ssh -L [A_IP:]A_PORT:C_IP:C_PORT USER@B_IP 
+        通过访问A的端口，从而访问C的端口
+    反向代理
+        前提: 服务器A -> 服务器B <- 服务器C，A,B无法直接访问C
+        服务器C运行下面命令，将C的端口通过B映射到B
+            ssh -R [B_IP:]B_PORT:C_IP:C_PORT USER@B_IP
+            通过访问B的端口，从而访问C的端口
+        服务器A运行下面命令，将A的端口通过B映射到B
+            ssh -R [B_IP:]B_PORT:A_IP:A_PORT USER@B_IP
+            通过访问B的端口，从而访问A的端口
+PS:
+    防火墙，超时断连，ssh配置，如:GateWay yes(允许反向代理开启端口)
