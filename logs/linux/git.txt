@@ -1,0 +1,5 @@
+1. git init {dir}, 在dir目录下创建.git仓库
+2. git add {file}, 将文件从工作区{dir}添加到暂存区
+3. git commit, 从暂停区提交到仓库
+4. git push, 从本地仓库提交到远程仓库
+
