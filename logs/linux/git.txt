@@ -1,5 +1,16 @@
+<<<<<<< HEAD，来源与当前
 1. git reset {--mixed|--hard|--soft} {HEAD}，git 重置HEAD，跳转到HEAD。
 2. --mixed 跳转到HEAD，HEAD之后的文件等待添加，默认模式。
 3. --soft  跳转到HEAD，HEAD之后的文件已添加到暂存区。
 4. --hard  跳转到HEAD，HEAD之后的文件也被清除。
 5. git reflog 查看HEAD跳转历史。
+=======
+1. git init {dir}, 在dir目录下创建.git仓库
+2. git add {file}, 将文件从工作区{dir}添加到暂存区
+3. git commit, 从暂停区提交到仓库
+4. git push, 从本地仓库提交到远程仓库
+>>>>>>> f3f34f1207b14eb9aecbd9714a1af1d5156591cd
+
+git push 到远程后，git reset HEAD，会提示git pull获取远程更新。
+等同于此时HEAD分支，而其他用户提交了新的分支，你可以pull最新的代码再处理。
+可以提交，并解决冲突。
