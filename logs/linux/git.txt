@@ -1,0 +1,5 @@
+1. git reset {--mixed|--hard|--soft} {HEAD}，git 重置HEAD，跳转到HEAD。
+2. --mixed 跳转到HEAD，HEAD之后的文件等待添加，默认模式。
+3. --soft  跳转到HEAD，HEAD之后的文件已添加到暂存区。
+4. --hard  跳转到HEAD，HEAD之后的文件也被清除。
+5. git reflog 查看HEAD跳转历史。
