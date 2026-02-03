@@ -1,0 +1,7 @@
+- 1. 通过docker安装node镜像，执行dockerfile-env，安装依赖， 创建node-env:latest镜像。
+- 2. 运行 build.sh
+    - 2.1 获取最新的代码
+    - 2.2 更新node-env:latest镜像
+    - 2.3 启动node-env:latest镜像，挂载dist_latest到容器dist，于node-env容器内执行build
+    - 2.4 备份本地dist目录，再将dist_latest覆盖dist
+    - 2.5 重启nginx
